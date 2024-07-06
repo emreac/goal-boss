@@ -24,10 +24,16 @@ public class ProductCollectController : MonoBehaviour
         if (other.CompareTag("Player") && isReadyToPick)
         {
             bagController = other.GetComponent<BagController>();
-            bagController.AddProductToBag(productData);
-            Debug.Log("Player");
-            isReadyToPick = false;
-            StartCoroutine(ProductPicked());
+
+            if (bagController.IsEmptySpace())
+            {
+                bagController.AddProductToBag(productData);
+
+                isReadyToPick = false;
+                StartCoroutine(ProductPicked());
+            }
+
+
         }
     }
     IEnumerator ProductPicked()
@@ -39,6 +45,7 @@ public class ProductCollectController : MonoBehaviour
         transform.gameObject.LeanScale(originalScale, 0.5f).setEase(LeanTweenType.easeOutBack);
         isReadyToPick = true;
     }
+
 
 
 
