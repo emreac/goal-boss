@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMoveManager : MonoBehaviour
 {
@@ -23,6 +25,8 @@ public class PlayerMoveManager : MonoBehaviour
 
     private void Update()
     {
+
+
         if (isJoystick)
         {
             var movementDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y);
@@ -31,9 +35,12 @@ public class PlayerMoveManager : MonoBehaviour
             if (movementDirection.sqrMagnitude <= 0f)
             {
                 playerAC.SetBool("Run", false);
+
                 return;
             }
             playerAC.SetBool("Run", true);
+
+
             var targetDir = Vector3.RotateTowards(controller.transform.forward, movementDirection,
                 rotationSpeed * Time.deltaTime, 0f);
             controller.transform.rotation = Quaternion.LookRotation(targetDir);
