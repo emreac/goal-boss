@@ -15,4 +15,4 @@ MonoBehaviour:
   productPrefab: {fileID: 5283062101113866727, guid: 52dafb490731fb94f9492d559e17539d,
     type: 3}
   productType: 1
-  productPrice: 3
+  productPrice: 4
