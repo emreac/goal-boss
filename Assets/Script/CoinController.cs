@@ -19,7 +19,13 @@ public class CoinController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             CashManager.instance.AddCoin(coinPrice);
+            PlayGrabSound();
             Destroy(gameObject);
         }
+    }
+    private void PlayGrabSound()
+    {
+        AudioManager.instance.PlayAudio(AudioClipType.grabClip);
+
     }
 }

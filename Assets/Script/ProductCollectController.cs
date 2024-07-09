@@ -27,6 +27,7 @@ public class ProductCollectController : MonoBehaviour
 
             if (bagController.IsEmptySpace())
             {
+                AudioManager.instance.PlayAudio(AudioClipType.grabClip);
                 bagController.AddProductToBag(productData);
 
                 isReadyToPick = false;

@@ -8,6 +8,7 @@ public class BagController : MonoBehaviour
 {
     private Vector3 originalScale;
     public GameObject waterBottlesInBox;
+    public GameObject energyBottlesInBox;
 
     [SerializeField] private Transform bag;
     public List<ProductData> productDataList;
@@ -48,27 +49,60 @@ public class BagController : MonoBehaviour
         if (other.CompareTag("UnlockedTrainArea"))
         {
             UnlockTrainUnit trainUnit = other.GetComponent<UnlockTrainUnit>();
-
             ProductType neededType = trainUnit.GetNeededProductType();
 
-            for (int i = productDataList.Count - 1; i >= 0; i--)
-            {
-                if (productDataList[i].productType == neededType)
-                {
-                    if (trainUnit.StoreProduct() == true)
-                    {
-                        //Animation for Sold Items
-                        StartCoroutine(AddBottlesToBoxes());
-                        Destroy(bag.transform.GetChild(i).gameObject);
-                        productDataList.RemoveAt(i);
-                    }
-                }
+            // Start the coroutine to handle the product destruction in sequence
+            StartCoroutine(DestroyProductsSequentially(trainUnit, neededType));
 
-
-            }
             StartCoroutine(PutProductsInOrder());
-
             ControlBagCapacity();
+
+            //StartCoroutine(AddBottlesToBoxes());
+            if (neededType == ProductType.water && productDataList.Count > 0)
+            {
+                StartCoroutine(AddWaterBottlesToBoxes());
+            }
+            if (neededType == ProductType.enegeryDrink && productDataList.Count > 0)
+            {
+                StartCoroutine(AddEnergyBottlesToBoxes());
+            }
+        }
+
+
+    }
+    private IEnumerator DestroyProductsSequentially(UnlockTrainUnit trainUnit, ProductType neededType)
+    {
+        List<GameObject> objectsToDestroy = new List<GameObject>();
+        List<int> indicesToRemove = new List<int>();
+
+        // Collect objects to be destroyed and their indices
+        for (int i = productDataList.Count - 1; i >= 0; i--)
+        {
+            if (productDataList[i].productType == neededType)
+            {
+                if (trainUnit.StoreProduct() == true)
+                {
+                    objectsToDestroy.Add(bag.transform.GetChild(i).gameObject);
+                    indicesToRemove.Add(i);
+                }
+            }
+        }
+
+        // Remove items one by one with delay
+        for (int j = 0; j < objectsToDestroy.Count; j++)
+        {
+            PlayShopSound();
+            // Animation for Sold Items
+
+
+            // Destroy the child and remove the product data
+            Destroy(objectsToDestroy[j]);
+
+            // Remove product data from list
+            productDataList.RemoveAt(indicesToRemove[j]);
+
+            // Wait for a specified time before destroying the next item
+            yield return new WaitForSeconds(0.1f); // Adjust the time as needed
         }
     }
     private void SellProductsToShop(ProductData productData)
@@ -147,7 +181,7 @@ public class BagController : MonoBehaviour
         return false;
     }
 
-    IEnumerator AddBottlesToBoxes()
+    IEnumerator AddWaterBottlesToBoxes()
     {
 
         waterBottlesInBox.SetActive(true);
@@ -155,6 +189,16 @@ public class BagController : MonoBehaviour
         yield return new WaitForSeconds(6.0f);
 
         waterBottlesInBox.SetActive(false);
+
+    }
+    IEnumerator AddEnergyBottlesToBoxes()
+    {
+
+        energyBottlesInBox.SetActive(true);
+        DOTween.Restart("EnergyBottleBoxScaleOn");
+        yield return new WaitForSeconds(6.0f);
+
+        energyBottlesInBox.SetActive(false);
 
     }
 
@@ -165,6 +209,13 @@ public class BagController : MonoBehaviour
         {
             float newYPos = productSize.y * i;
             bag.GetChild(i).transform.localPosition = new Vector3(0, newYPos, 0);
+        }
+    }
+    private void PlayShopSound()
+    {
+        if (productDataList.Count > 0)
+        {
+            AudioManager.instance.PlayAudio(AudioClipType.shopClip);
         }
     }
 }

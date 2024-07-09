@@ -38,6 +38,7 @@ public class LockedUnitController : MonoBehaviour
     {
         if (CashManager.instance.TryBuyUnit(price))
         {
+            AudioManager.instance.PlayAudio(AudioClipType.shopClip);
             Unlock();
             SaveUnit();
         }
