@@ -27,6 +27,7 @@ public class BagController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        /*
         if (other.CompareTag("ShopPoint"))
         {
             for (int i = productDataList.Count - 1; i >= 0; i--)
@@ -42,6 +43,32 @@ public class BagController : MonoBehaviour
             ControlBagCapacity();
 
 
+        }
+        */
+        if (other.CompareTag("UnlockedTrainArea"))
+        {
+            UnlockTrainUnit trainUnit = other.GetComponent<UnlockTrainUnit>();
+
+            ProductType neededType = trainUnit.GetNeededProductType();
+
+            for (int i = productDataList.Count - 1; i >= 0; i--)
+            {
+                if (productDataList[i].productType == neededType)
+                {
+                    if (trainUnit.StoreProduct() == true)
+                    {
+                        //Animation for Sold Items
+                        StartCoroutine(AddBottlesToBoxes());
+                        Destroy(bag.transform.GetChild(i).gameObject);
+                        productDataList.RemoveAt(i);
+                    }
+                }
+
+
+            }
+            StartCoroutine(PutProductsInOrder());
+
+            ControlBagCapacity();
         }
     }
     private void SellProductsToShop(ProductData productData)
@@ -129,5 +156,15 @@ public class BagController : MonoBehaviour
 
         waterBottlesInBox.SetActive(false);
 
+    }
+
+    private IEnumerator PutProductsInOrder()
+    {
+        yield return new WaitForSeconds(0.15f);
+        for (int i = 0; i < bag.childCount; i++)
+        {
+            float newYPos = productSize.y * i;
+            bag.GetChild(i).transform.localPosition = new Vector3(0, newYPos, 0);
+        }
     }
 }
