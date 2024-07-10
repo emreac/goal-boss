@@ -11,7 +11,7 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private GameObject wingArea;
     [SerializeField] private GameObject wings;
     [SerializeField] private GameObject ballArea;
-
+    private bool isUserCompleteLevel;
 
     //Supporters
     public GameObject support1;
@@ -40,6 +40,7 @@ public class AreaManager : MonoBehaviour
 
                 cameraSwitcher.PerformCameraAction();
                 StartCoroutine(ActivateEneryArea());
+                other.enabled = false;
             }
         }
         if (other.CompareTag("EnergyDrinkArea"))
@@ -57,7 +58,7 @@ public class AreaManager : MonoBehaviour
                 support2.SetActive(true);
                 ballArea.SetActive(true);
                 cameraSwitcher.BallAreaCamera();
-
+                TinySauce.OnGameFinished(isUserCompleteLevel, lockedUnitController.score, "AllAreasCompleted");
             }
         }
 

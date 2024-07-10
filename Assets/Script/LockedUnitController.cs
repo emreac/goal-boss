@@ -5,6 +5,7 @@ public class LockedUnitController : MonoBehaviour
 {
 
 
+
     [Header("Settings")]
     [SerializeField] private int price;
     [SerializeField] private int ID;
@@ -15,6 +16,7 @@ public class LockedUnitController : MonoBehaviour
     [SerializeField] private GameObject unLockedUnit;
     public bool isPurchased;
     private string keyUnit = "keyUnit";
+    public float score;
 
 
     // Start is called before the first frame update
@@ -34,6 +36,7 @@ public class LockedUnitController : MonoBehaviour
         if (other.CompareTag("Player") && !isPurchased)
         {
             UnlockUnit();
+            TinySauce.OnGameFinished(score);
         }
     }
     //Private
@@ -44,12 +47,14 @@ public class LockedUnitController : MonoBehaviour
             PlayUnlockedSound();
             Unlock();
             SaveUnit();
+            score += 10f;
         }
         //Check cash
         //If enough money, activate
     }
     private void Unlock()
     {
+
         isPurchased = true;
         lockedUnit.SetActive(false);
         unLockedUnit.SetActive(true);

@@ -20,6 +20,7 @@ public class BagController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TinySauce.OnGameStarted("Game Started");
         maxBagCapacity = 5;
     }
 
