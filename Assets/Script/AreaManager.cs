@@ -10,6 +10,7 @@ public class AreaManager : MonoBehaviour
     [SerializeField] private GameObject enegryArea;
     [SerializeField] private GameObject wingArea;
     [SerializeField] private GameObject wings;
+    [SerializeField] private GameObject ballArea;
 
 
     //Supporters
@@ -20,6 +21,7 @@ public class AreaManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         LoadStateEnergy();
     }
 
@@ -53,7 +55,8 @@ public class AreaManager : MonoBehaviour
                 wings.SetActive(true);
                 cameraSwitcher.PerformCameraAction();
                 support2.SetActive(true);
-
+                ballArea.SetActive(true);
+                cameraSwitcher.BallAreaCamera();
 
             }
         }
