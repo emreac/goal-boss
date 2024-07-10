@@ -34,7 +34,7 @@ public class CashManager : MonoBehaviour
     }
     public bool TryBuyUnit(int price)
     {
-        if (GetCoins() > price)
+        if (GetCoins() >= price)
         {
             //Spend money
             SpendCoint(price);

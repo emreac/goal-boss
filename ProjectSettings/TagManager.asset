@@ -8,6 +8,9 @@ TagManager:
   - ShopPoint
   - ShopPointWater
   - UnlockedTrainArea
+  - GoalKeeperArea
+  - EnergyDrinkArea
+  - WingArea
   layers:
   - Default
   - TransparentFX

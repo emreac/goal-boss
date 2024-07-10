@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BagController : MonoBehaviour
 {
+
+
     private Vector3 originalScale;
     public GameObject waterBottlesInBox;
     public GameObject energyBottlesInBox;
@@ -28,6 +30,7 @@ public class BagController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+
         /*
         if (other.CompareTag("ShopPoint"))
         {
@@ -56,6 +59,7 @@ public class BagController : MonoBehaviour
 
             StartCoroutine(PutProductsInOrder());
             ControlBagCapacity();
+
 
             //StartCoroutine(AddBottlesToBoxes());
             if (neededType == ProductType.water && productDataList.Count > 0)
@@ -217,5 +221,9 @@ public class BagController : MonoBehaviour
         {
             AudioManager.instance.PlayAudio(AudioClipType.shopClip);
         }
+    }
+    private void PlayUnlockedSound()
+    {
+        AudioManager.instance.PlayAudio(AudioClipType.unlockedClip);
     }
 }

@@ -1,13 +1,13 @@
 using UnityEngine;
 
 
-public enum AudioClipType { grabClip, shopClip }
+public enum AudioClipType { grabClip, shopClip, unlockedClip }
 public class AudioManager : MonoBehaviour
 {
     //Singleton
     public static AudioManager instance;
     [SerializeField] private AudioSource audioSource;
-    public AudioClip grabClip, ShopClip;
+    public AudioClip grabClip, ShopClip, unlockedClip;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -42,6 +42,10 @@ public class AudioManager : MonoBehaviour
             else if (clipType == AudioClipType.shopClip)
             {
                 audioClip = ShopClip;
+            }
+            else if (clipType == AudioClipType.unlockedClip)
+            {
+                audioClip = unlockedClip;
             }
             audioSource.PlayOneShot(audioClip, 0.6f);
         }

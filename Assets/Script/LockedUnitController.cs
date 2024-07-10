@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class LockedUnitController : MonoBehaviour
 {
+
+
     [Header("Settings")]
     [SerializeField] private int price;
     [SerializeField] private int ID;
@@ -11,7 +13,7 @@ public class LockedUnitController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private GameObject lockedUnit;
     [SerializeField] private GameObject unLockedUnit;
-    private bool isPurchased;
+    public bool isPurchased;
     private string keyUnit = "keyUnit";
 
 
@@ -34,11 +36,12 @@ public class LockedUnitController : MonoBehaviour
             UnlockUnit();
         }
     }
-    private void UnlockUnit()
+    //Private
+    public void UnlockUnit()
     {
         if (CashManager.instance.TryBuyUnit(price))
         {
-            AudioManager.instance.PlayAudio(AudioClipType.shopClip);
+            PlayUnlockedSound();
             Unlock();
             SaveUnit();
         }
@@ -52,7 +55,7 @@ public class LockedUnitController : MonoBehaviour
         unLockedUnit.SetActive(true);
     }
 
-    private void SaveUnit()
+    public void SaveUnit()
     {
         string key = keyUnit + ID.ToString();
         PlayerPrefs.SetString(key, "saved");
@@ -67,5 +70,9 @@ public class LockedUnitController : MonoBehaviour
             Unlock();
         }
 
+    }
+    private void PlayUnlockedSound()
+    {
+        AudioManager.instance.PlayAudio(AudioClipType.unlockedClip);
     }
 }
