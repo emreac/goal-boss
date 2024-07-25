@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraSwitcher : MonoBehaviour
 {
+
+    public PlayerMoveManager MoveManager;
     //public LockedUnitController lockedUnitController;
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera actionCamera;
@@ -42,6 +44,8 @@ public class CameraSwitcher : MonoBehaviour
 
     }
 
+   
+
     public void BallAreaCamera()
     {
         StartCoroutine(SwitchCamerasAndWaitBallArea());
@@ -50,6 +54,9 @@ public class CameraSwitcher : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         // Activate actionCamera and deactivate mainCamera
+        //Disable Movement
+        MoveManager.isJoystick = false;
+
         mainCamera.gameObject.SetActive(false);
         actionCamera.gameObject.SetActive(true);
 
@@ -60,12 +67,18 @@ public class CameraSwitcher : MonoBehaviour
         actionCamera.gameObject.SetActive(false);
 
         mainCamera.gameObject.SetActive(true);
+
+        MoveManager.isJoystick = true;
     }
 
     private IEnumerator SwitchCamerasAndWaitStart()
     {
         yield return new WaitForSeconds(0.5f);
         // Activate actionCamera and deactivate mainCamera
+        //Disable Joystick
+        MoveManager.isJoystick = false;
+
+
         mainCamera.gameObject.SetActive(false);
         tutorCamera.gameObject.SetActive(true);
 
@@ -76,12 +89,17 @@ public class CameraSwitcher : MonoBehaviour
         tutorCamera.gameObject.SetActive(false);
 
         mainCamera.gameObject.SetActive(true);
+
+        MoveManager.isJoystick = true;
     }
 
     public IEnumerator SwitchCamerasAndWaitBallArea()
     {
         yield return new WaitForSeconds(0.5f);
         // Activate actionCamera and deactivate mainCamera
+        //Player Controller Disable
+        MoveManager.isJoystick = false;
+
         mainCamera.gameObject.SetActive(false);
         ballAreaCamera.gameObject.SetActive(true);
 
@@ -92,7 +110,13 @@ public class CameraSwitcher : MonoBehaviour
         ballAreaCamera.gameObject.SetActive(false);
 
         mainCamera.gameObject.SetActive(true);
+
+        MoveManager.isJoystick = true;
     }
 
+    void LoadStateGoalKeeper()
+    {
+
+    }
 
 }

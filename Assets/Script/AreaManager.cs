@@ -9,7 +9,7 @@ public class AreaManager : MonoBehaviour
     //Sorted Areas
     [SerializeField] private GameObject enegryArea;
     [SerializeField] private GameObject wingArea;
-    [SerializeField] private GameObject wings;
+    //[SerializeField] private GameObject wings;
     [SerializeField] private GameObject ballArea;
     private bool isUserCompleteLevel;
 
@@ -21,7 +21,10 @@ public class AreaManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        LoadStateSupport1();
+        LoadStateSupport2();
+        LoadStateBall();
+        LoadStateWing();
         LoadStateEnergy();
     }
 
@@ -53,12 +56,16 @@ public class AreaManager : MonoBehaviour
 
             if (lockedUnitController.isPurchased)
             {
-                wings.SetActive(true);
+               //
+               //wings.SetActive(true);
                 cameraSwitcher.PerformCameraAction();
                 support2.SetActive(true);
+                PlayerPrefs.SetInt("Support2Active", 1);
+                other.enabled = false;
                 ballArea.SetActive(true);
+                StartCoroutine(ActivateBallArea());
                 cameraSwitcher.BallAreaCamera();
-                TinySauce.OnGameFinished(isUserCompleteLevel, lockedUnitController.score, "AllAreasCompleted");
+                TinySauce.OnGameFinished(isUserCompleteLevel, lockedUnitController.score, "HalfAreasCompleted");
             }
         }
 
@@ -69,6 +76,7 @@ public class AreaManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         enegryArea.SetActive(true);
         support1.SetActive(true);
+        PlayerPrefs.SetInt("Support1Active", 1);
 
         PlayerPrefs.SetInt("EnergyAreaActive", 1); // Save state as 1 (true)
 
@@ -82,6 +90,17 @@ public class AreaManager : MonoBehaviour
 
 
         PlayerPrefs.SetInt("WingAreaActive", 1); // Save state as 1 (true)
+
+        lockedUnitController.SaveUnit();
+    }
+
+    IEnumerator ActivateBallArea()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ballArea.SetActive(true);
+
+
+        PlayerPrefs.SetInt("BallAreaActive", 1); // Save state as 1 (true)
 
         lockedUnitController.SaveUnit();
     }
@@ -118,6 +137,57 @@ public class AreaManager : MonoBehaviour
         }
 
     }
+
+    void LoadStateBall()
+    {
+        int ballAreaActive = PlayerPrefs.GetInt("BallAreaActive", 0); // Default to 0 (false)
+
+        if (ballAreaActive == 1)
+        {
+            ballArea.SetActive(true);
+
+        }
+        else
+        {
+            ballArea.SetActive(false);
+
+        }
+
+    }
+
+    void LoadStateSupport1()
+    {
+        int support1Active = PlayerPrefs.GetInt("Support1Active", 0); // Default to 0 (false)
+
+        if (support1Active == 1)
+        {
+            support1.SetActive(true);
+
+        }
+        else
+        {
+            support1.SetActive(false);
+
+        }
+    }
+
+    void LoadStateSupport2()
+    {
+        int support2Active = PlayerPrefs.GetInt("Support2Active", 0); // Default to 0 (false)
+
+        if (support2Active == 1)
+        {
+            support2.SetActive(true);
+
+        }
+        else
+        {
+            support2.SetActive(false);
+
+        }
+    }
+
+
 
     public void PlayUnlockedSound()
     {
